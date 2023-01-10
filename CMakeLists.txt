@@ -179,8 +179,7 @@ if(PERFORM_STYLE_CHECKS)
 			-pP ${PROJECT_SOURCE_DIR}/src/*.[ch]
 			${PROJECT_SOURCE_DIR}/include/*.h
 			${PROJECT_SOURCE_DIR}/test/*.c
-			${PROJECT_SOURCE_DIR}/examples/*.c
-			${PROJECT_SOURCE_DIR}/main/*.c)
+			${PROJECT_SOURCE_DIR}/examples/*.c)
 
 		add_custom_target(check_whitespace
 			COMMAND ${PERL_EXECUTABLE} ${PROJECT_SOURCE_DIR}/utils/check_whitespace.pl
