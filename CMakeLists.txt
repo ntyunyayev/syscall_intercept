@@ -44,6 +44,7 @@ option(PERFORM_STYLE_CHECKS
 	"check coding style, license headers (requires perl)" ON)
 option(BUILD_TESTS "build and enable tests" ON)
 option(BUILD_EXAMPLES "build examples" ON)
+option(BUILD_MAIN "build main" ON)
 option(TREAT_WARNINGS_AS_ERRORS
 	"make the build fail on any warnings during compilation, or linking" ON)
 option(EXPECT_SPURIOUS_SYSCALLS
@@ -178,7 +179,8 @@ if(PERFORM_STYLE_CHECKS)
 			-pP ${PROJECT_SOURCE_DIR}/src/*.[ch]
 			${PROJECT_SOURCE_DIR}/include/*.h
 			${PROJECT_SOURCE_DIR}/test/*.c
-			${PROJECT_SOURCE_DIR}/examples/*.c)
+			${PROJECT_SOURCE_DIR}/examples/*.c
+			${PROJECT_SOURCE_DIR}/main/*.c)
 
 		add_custom_target(check_whitespace
 			COMMAND ${PERL_EXECUTABLE} ${PROJECT_SOURCE_DIR}/utils/check_whitespace.pl
@@ -228,6 +230,10 @@ endif()
 
 if(BUILD_EXAMPLES)
 	add_subdirectory(examples)
+endif()
+
+if(BUILD_MAIN)
+	add_subdirectory(main)
 endif()
 
 if(BUILD_TESTS)
