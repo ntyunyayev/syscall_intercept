@@ -30,14 +30,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * icap.c -- tiny syscall intercepting example library, turning every
- * lower case letter 'i' to on upper case 'I' in buffers used in write syscalls.
- */
 #include <stddef.h>
 #include <string.h>
 #include <syscall.h>
 #include <stdio.h> 
+#include <unistd.h>
+#include <sys/types.h>
 
 #include "libsyscall_intercept_hook_point.h"
 
@@ -47,14 +45,29 @@ static int hook(long syscall_number,
 				long arg4, long arg5,
 				long *result)
 {
-	(void) arg2;
 	(void) arg3;
 	(void) arg4;
 	(void) arg5;
+	
 	if (syscall_number == SYS_listen)
 	{
 		printf("listen() intercepted\n");
+		printf("pid : %ld\n", (long)getpid());
 		*result = syscall_no_intercept(SYS_listen, arg0, arg1);
+		return 0;
+	}
+	if (syscall_number == SYS_bind)
+	{
+		printf("bind() intercepted\n");
+		*result = syscall_no_intercept(SYS_bind, arg0, arg1, arg2);
+		return 0;
+	}
+	
+	if (syscall_number == SYS_epoll_create1)
+	{
+		printf("epoll() intercepted\n");
+		printf("pid : %ld\n", (long)getpid());
+		*result = syscall_no_intercept(SYS_epoll_create1, arg0, arg1, arg2);
 		return 0;
 	}
 	else
@@ -66,5 +79,7 @@ static int hook(long syscall_number,
 static __attribute__((constructor)) void
 start(void)
 {
+	printf("hello\n");
+	printf("hello2\n");
 	intercept_hook_point = &hook;
 }
